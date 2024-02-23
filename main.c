@@ -14,6 +14,7 @@ typedef struct Node {
 } Node;
 Node* createNode(int x, int y, Node* parent) {
     Node* newNode = (Node*)malloc(sizeof(Node));
+    //printf("create NOde %i %i\n", x, y);
     newNode->x = x;
     newNode->y = y;
     newNode->parent = parent;
@@ -40,7 +41,7 @@ int insert(Node **list, int x, int y)
 }
 int search(Node *queue, Node *visited)
 {
-    Node *tmp = queue;
+    //Node *tmp = queue;
     Node *tmp1 = visited;
 
     while (tmp1)
@@ -55,14 +56,17 @@ int neighbors_search(Node **queue, Node **visited, int grid[ROW][COL],int x, int
 {
     int i;
     Node *current = (*queue);
-
-    if(y + 1 < COL && grid[x][y + 1] != 1)
+    printf("neihbors x = %i y = %i\n", x, y);
+    if(y + 1 < COL && grid[y+1][x] != 1)
+    {
         insert(queue, x, y+1);
-    else if(y - 1 > 0 && grid[x][y - 1] != 1)
-        insert(queue, x, y+1);
-    else if(x+1 < COL && grid[x+1][y] != 1)
+        //printf("inserted %i %i\n", x, y+1);
+    }
+    else if(y - 1 > 0 && grid[y-1][x] != 1)
+        insert(queue, x, y-1);
+    else if(x+1 < COL && grid[y][x+1] != 1)
         insert(queue, x + 1, y);
-    else if(x - 1 > 0&& grid[x - 1][y] != 1)
+    else if(x - 1 > 0&& grid[y][x-1] != 1)
         insert(queue, x - 1, y);
     return(EXIT_SUCCESS);
 }
@@ -91,13 +95,17 @@ int bfs(int grid[ROW][COL], int x, int y)
     Node *current = (*queue);
     while (current)
     {
+        //printf("SEG FAULTT  TTTTTT\n");
         if (!search(current, *visited))
         {
-            neighbors_search(queue, visited,grid, x, y);
+            printf("grid[%i][%i] = \n", current->y, current->x);
+            printf("%i\n", grid[current->y][current->x]);
+            grid[current->y][current->x] = 7;
+            neighbors_search(queue, visited,grid, current->x, current->y);
+            insert(visited, current->x, current->y);
+            pop(queue, current->x, current->y);
         }
-        printf("grid[%i][%i] = %i\n", current->x, current->y, grid[current->x][current->y]);
-        grid[current->x][current->y] = 7;
-        pop(queue, current->x, current->y);
+        //printf("after grid[%i][%i] = %i\n", current->x, current->y, grid[current->y][current->x]);
         current = *queue;
     }
     return(EXIT_SUCCESS);
@@ -116,7 +124,7 @@ int main()
             { 1, 0, 1, 1, 1, 1, 0, 1, 1, 1 },
             { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 } };
     print_grid(grid);
-    bfs(grid, 1, 3);
+    bfs(grid, 3, 1);
     print_grid(grid);
-
+    return(EXIT_SUCCESS);
 }
