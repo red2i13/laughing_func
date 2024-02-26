@@ -79,34 +79,65 @@ int dequeue(node **queue, node *cur)
             free(tmp);
             return(0);
         }
-        tmp = tmp->next
+        tmp = tmp->next;
     }
     return(1);
     
 }
-int bfs(int st_x, int st_y)
+int neighbors(node **queue, node *cur,int grid[7][7], int vis[row][col])
+{
+    int x = cur->x;
+    int y = cur->y;
+    if(x + 1 < row && grid[x + 1][y] != 1 && vis[x + 1][y] == 0)
+    {
+        enqueue(queue, x + 1, y);
+    }
+    if(x - 1 >= 0 && grid[x - 1][y] != 1 && vis[x - 1][y] == 0)
+    {
+        enqueue(queue, x + 1, y);
+    }
+    if(y + 1 < col && grid[x][y + 1] && vis[x][y + 1] == 0)
+    {
+        enqueue(queue, x, y + 1);
+    }
+    if(y - 1 >= 0 && grid[x][y - 1] && vis[x][y - 1] == 0)
+    {
+        enqueue(queue, x, y - 1);
+    }
+    return(EXIT_SUCCESS);
+    
+}
+int bfs(int grid[7][7] ,int st_x, int st_y)
 {
     int arr[row][col]; 
     memset(arr, 0, sizeof(arr));
     print_vis(arr);
     node *queue;
     queue = NULL;
-    print_list(queue);
     enqueue(&queue, st_x, st_y);
     print_list(queue);
-    printf("---------------------\n");
-    enqueue(&queue, 5, 6);
-    print_list(queue);
+   //node *tmp = queue;
+    while(queue)
+    {
+        //arr[queue->x][queue->y] = 1;
+        //neighbors(&queue, queue, grid, arr);
+
+        dequeue(&queue, queue);
+        exit(5);
+    }
+    // print_list(queue);
+    // printf("---------------------\n");
+    // enqueue(&queue, 5, 6);
+    // dequeue(&queue, queue);
+    // print_list(queue);
 
     exit(5);
     return(EXIT_SUCCESS);
-
 }
 
 int main()
 {
-    bfs(3, 5);
-     int a [7][7] = {
+    int a[7][7] = {
         {0,1,1,0,0,0,0},
         {1,0,0,1,0,0,0},
         {1,0,0,1,1,0,0},
@@ -115,4 +146,5 @@ int main()
         {0,0,0,0,1,0,1}, 
         {0,0,0,0,1,1,0} 
     };
+    bfs(a,3, 5);
 }
