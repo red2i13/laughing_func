@@ -36,6 +36,7 @@ void print_list(node *lst)
         printf("Node N:%i tmp->x = %i , tmp->y = %i\n", i++, tmp->x, tmp->y);
         tmp = tmp->next;
     }
+    printf("--------------------------------------------------\n");
     
 }
 int enqueue(node **queue, int x, int y)
@@ -67,22 +68,54 @@ int enqueue(node **queue, int x, int y)
     }
     return(EXIT_SUCCESS);
 }
-int dequeue(node **queue, node *cur)
-{
-    node *tmp = (*queue);
-    while (tmp)
-    {
-        if (tmp == (*queue))
-        {
-            tmp->next->parent = NULL;
-            (*queue) = (*queue)->next;
-            free(tmp);
-            return(0);
-        }
-        tmp = tmp->next;
-    }
-    return(1);
+//function to revisit
+// int dequeue(node **queue, node *cur)
+// {
+//     node *tmp = (*queue);
+//     if(!tmp)
+//         return(1);
+//     while (tmp)
+//     {
+//         if (tmp == (*queue))
+//         {
+//             tmp->next->parent = NULL;
+//             (*queue) = (*queue)->next;
+//             free(tmp);
+//             return(0);
+//         }
+//         tmp = tmp->next;
+//     }
+//     return(1);
     
+// }
+//chat function to test
+void dequeue(node **list, node *current) {
+    if (!list || !*list || !current) {
+        // Handle error cases: empty list, NULL list pointer, or NULL current node
+        return;
+    }
+
+    // Handle removing the head node
+    if (*list == current) {
+        *list = (*list)->next; // Update head pointer
+    } else {
+        // Find the previous node of the current node
+        node *previous = *list;
+        while (previous->next != current && previous->next != NULL) {
+            previous = previous->next;
+        }
+
+        // Check if current node was found in the list
+        if (previous->next == current) {
+            previous->next = current->next; // Link previous node to the next node
+        } else {
+            // Current node not found in the list (may be a dangling pointer)
+            return;
+        }
+    }
+
+    // Free the memory of the removed node
+    free(current);
 }
 int neighbors(node **queue, node *cur,int grid[7][7], int vis[row][col])
 {
@@ -119,17 +152,18 @@ int bfs(int grid[7][7] ,int st_x, int st_y)
    //node *tmp = queue;
     while(queue)
     {
-        //arr[queue->x][queue->y] = 1;
-        //neighbors(&queue, queue, grid, arr);
-
+        arr[queue->x][queue->y] = 1;
+        neighbors(&queue, queue, grid, arr);
         dequeue(&queue, queue);
-        exit(5);
+        print_list(queue);
+        
     }
     // print_list(queue);
     // printf("---------------------\n");
     // enqueue(&queue, 5, 6);
     // dequeue(&queue, queue);
     // print_list(queue);
+    print_vis(arr);
 
     exit(5);
     return(EXIT_SUCCESS);
