@@ -2,8 +2,8 @@
 #include <stdio.h>
 #include <string.h>
 
-#define row 5
-#define col 5
+#define row 7
+#define col 10
 
 typedef struct node{
     struct node *next;
@@ -46,7 +46,7 @@ int enqueue(node **queue, int x, int y)
         return(1);
     new_node->x = x;
     new_node->y = y;
-
+    printf("newnode->x = %i && newnode->y = %i\n", new_node->x, new_node->y);
     if ((*queue) == NULL)
     {
         printf("DEBUUUUUUUUG\n");
@@ -54,12 +54,12 @@ int enqueue(node **queue, int x, int y)
         (*queue)->parent = (*queue)->next = 0;
 
     }
-    else if ((*queue)->parent == NULL)
-    {
-        new_node->next = 0;
-        new_node->parent = (*queue);
-        (*queue)->next = new_node;
-    }
+    // else if ((*queue)->parent == NULL)
+    // {
+    //     new_node->next = 0;
+    //     new_node->parent = (*queue);
+    //     (*queue)->next = new_node;
+    // }
     else
     {
         new_node->next = (*queue)->next;
@@ -117,30 +117,32 @@ void dequeue(node **list, node *current) {
     // Free the memory of the removed node
     free(current);
 }
-int neighbors(node **queue, node *cur,int grid[7][7], int vis[row][col])
+int neighbors(node **queue, node *cur,int grid[7][10], int vis[row][col])
 {
     int x = cur->x;
     int y = cur->y;
-    if(x + 1 < row && grid[x + 1][y] != 1 && vis[x + 1][y] == 0)
+    //printf("(((x: %i y: %i vis[x-1][y] = %i grid[x-1][y] = %i)))\n", x-1, y, vis[x-1][y], grid[x-1][y]);
+    if(x + 1 < row - 1 && grid[x + 1][y] != 1 && vis[x + 1][y] == 0)
     {
         enqueue(queue, x + 1, y);
     }
-    if(x - 1 >= 0 && grid[x - 1][y] != 1 && vis[x - 1][y] == 0)
+    if(x - 1 > 0 && grid[x - 1][y] != 1 && vis[x - 1][y] == 0)
     {
         enqueue(queue, x + 1, y);
     }
-    if(y + 1 < col && grid[x][y + 1] && vis[x][y + 1] == 0)
+    if(y + 1 < col-1 && grid[x][y + 1]!= 1 && vis[x][y + 1] == 0)
     {
         enqueue(queue, x, y + 1);
+        //printf("yeeees\n");
     }
-    if(y - 1 >= 0 && grid[x][y - 1] && vis[x][y - 1] == 0)
+    if(y - 1 > 0 && grid[x][y - 1]!= 1 && vis[x][y - 1] == 0)
     {
         enqueue(queue, x, y - 1);
     }
     return(EXIT_SUCCESS);
     
 }
-int bfs(int grid[7][7] ,int st_x, int st_y)
+int bfs(int grid[7][10] ,int st_x, int st_y)
 {
     int arr[row][col]; 
     memset(arr, 0, sizeof(arr));
@@ -148,17 +150,17 @@ int bfs(int grid[7][7] ,int st_x, int st_y)
     node *queue;
     queue = NULL;
     enqueue(&queue, st_x, st_y);
-    print_list(queue);
+    //print_list(queue);
    //node *tmp = queue;
     while(queue)
     {
-        arr[queue->x][queue->y] = 1;
+        arr[queue->x][queue->y] = 2;
         neighbors(&queue, queue, grid, arr);
-        dequeue(&queue, queue);
         print_list(queue);
+        //exit(5);
+        dequeue(&queue, queue);
         
     }
-    // print_list(queue);
     // printf("---------------------\n");
     // enqueue(&queue, 5, 6);
     // dequeue(&queue, queue);
@@ -171,14 +173,15 @@ int bfs(int grid[7][7] ,int st_x, int st_y)
 
 int main()
 {
-    int a[7][7] = {
-        {0,1,1,0,0,0,0},
-        {1,0,0,1,0,0,0},
-        {1,0,0,1,1,0,0},
-        {0,1,1,0,0,0,0},
-        {0,0,1,0,0,1,1},
-        {0,0,0,0,1,0,1}, 
-        {0,0,0,0,1,1,0} 
+    int a[7][10] = {
+        {1,1,1,1,1,1,1,1,1,1},
+        {1,0,0,0,0,1,0,0,0,1},
+        {1,0,0,0,0,1,0,0,0,1},
+        {1,0,0,0,0,0,0,0,0,1},
+        {1,1,0,0,0,1,0,0,0,1},
+        {1,0,0,0,0,1,0,0,0,1}, 
+        {1,1,1,1,1,1,1,1,1,1} 
     };
-    bfs(a,3, 5);
+
+    bfs(a,1, 1);
 }
