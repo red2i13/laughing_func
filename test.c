@@ -88,12 +88,12 @@ int main() {
     }
     // Sample graph initialization
     int sampleGraph[6][6] = {
-        {0, 1, 1, 0, 0, 0},
-        {1, 0, 0, 1, 1, 0},
-        {1, 0, 0, 0, 1, 0},
-        {0, 1, 0, 0, 1, 1},
-        {0, 1, 1, 1, 0, 1},
-        {0, 0, 0, 1, 1, 0}
+        {1, 1, 1, 1, 1, 1},
+        {1, 0, 0, 1, 1, 1},
+        {1, 0, 0, 0, 1, 1},
+        {1, 1, 0, 0, 1, 1},
+        {1, 1, 1, 1, 0, 1},
+        {1, 1, 1, 1, 1, 1}
     };
     for (int i = 0; i < vertices; i++) {
         for (int j = 0; j < vertices; j++) {
@@ -101,7 +101,7 @@ int main() {
         }
     }
     printf("BFS Traversal: ");
-    BFS(graph, vertices, 0); // Starting BFS from vertex 0
+    BFS(graph, vertices, 1); // Starting BFS from vertex 0
     // Free allocated memory
     for (int i = 0; i < vertices; i++) {
         free(graph[i]);

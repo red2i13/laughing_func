@@ -68,27 +68,7 @@ int enqueue(node **queue, int x, int y)
     }
     return(EXIT_SUCCESS);
 }
-//function to revisit
-// int dequeue(node **queue, node *cur)
-// {
-//     node *tmp = (*queue);
-//     if(!tmp)
-//         return(1);
-//     while (tmp)
-//     {
-//        
-//         {
-//             tmp->next->parent = NULL;
-//             (*queue) = (*queue)->next;
-//             free(tmp);
-//             return(0);
-//         }
-//         tmp = tmp->next;
-//     }
-//     return(1);
-    
-// }
-//chat function to test
+
 void dequeue(node **list, node *current) {
     if (!list || !*list || !current) {
         // Handle error cases: empty list, NULL list pointer, or NULL current node
@@ -97,8 +77,12 @@ void dequeue(node **list, node *current) {
 
     // Handle removing the head node
     if (*list == current) {
+        node *tmp = *list;
         *list = (*list)->next; // Update head pointer
-    } else {
+        free(tmp); // Free the memory of the removed node
+        return;
+    } 
+    else {
         // Find the previous node of the current node
         node *previous = *list;
         while (previous->next != current && previous->next != NULL) {
@@ -113,9 +97,9 @@ void dequeue(node **list, node *current) {
             return;
         }
     }
-
     // Free the memory of the removed node
     free(current);
+    return;
 }
 int neighbors(node **queue, node *cur,int grid[7][10], int vis[row][col])
 {
@@ -128,7 +112,7 @@ int neighbors(node **queue, node *cur,int grid[7][10], int vis[row][col])
     }
     if(x - 1 > 0 && grid[x - 1][y] != 1 && vis[x - 1][y] == 0)
     {
-        enqueue(queue, x + 1, y);
+        enqueue(queue, x - 1, y);
     }
     if(y + 1 < col-1 && grid[x][y + 1]!= 1 && vis[x][y + 1] == 0)
     {
@@ -142,6 +126,8 @@ int neighbors(node **queue, node *cur,int grid[7][10], int vis[row][col])
     return(EXIT_SUCCESS);
     
 }
+
+//old func
 int bfs(int grid[7][10] ,int st_x, int st_y)
 {
     int arr[row][col]; 
@@ -166,8 +152,7 @@ int bfs(int grid[7][10] ,int st_x, int st_y)
     // dequeue(&queue, queue);
     // print_list(queue);
     print_vis(arr);
-
-    exit(5);
+    
     return(EXIT_SUCCESS);
 }
 
@@ -175,9 +160,9 @@ int main()
 {
     int a[7][10] = {
         {1,1,1,1,1,1,1,1,1,1},
-        {1,0,0,0,0,0,0,0,0,1},
         {1,0,0,0,0,1,0,0,0,1},
-        {1,0,0,0,0,0,0,0,0,1},
+        {1,0,0,0,0,1,0,0,0,1},
+        {1,0,0,0,0,1,0,0,0,1},
         {1,1,0,0,0,1,0,0,0,1},
         {1,0,0,0,0,1,0,0,0,1}, 
         {1,1,1,1,1,1,1,1,1,1} 
